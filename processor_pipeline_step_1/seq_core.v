@@ -50,6 +50,12 @@ wire              r2_read       ;
 wire              r2_write_en   ;
 wire [D_SIZE-1:0] r2_result     ;
 wire [D_SIZE-1:0] write_back    ;
+wire              forward1_r1   ;
+wire              forward2_r1   ;
+wire              forward1_r2   ;
+wire              forward2_r2   ;
+wire [D_SIZE-1:0] fw_operand_1  ;
+wire [D_SIZE-1:0] fw_operand_2  ;
 
 
 //******************************************************************************
@@ -88,13 +94,16 @@ seq_core_read
    .destination   (destination   ),
    .source_1      (source_1      ),
    .source_2      (source_2      ),
-   .operand_1     (operand_1     ),
-   .operand_2     (operand_2     ),
+   .operand_1     (fw_operand_1  ),
+   .operand_2     (fw_operand_2  ),
    .operand_a     (operand_a     ),
    .operand_b     (operand_b     )
 );
 
 
+//******************************************************************************
+// GENERAL PURPOSE REGISTERS
+//******************************************************************************
 registers
 #(
    .D_SIZE        (D_SIZE        )
@@ -110,6 +119,35 @@ registers
    .operand_1     (operand_1     ),
    .operand_2     (operand_2     )
 );
+
+
+//******************************************************************************
+// DATA DEPENDENCY CONTROL
+//******************************************************************************
+data_dependency_control data_dependency_control
+(
+   .opcode        (opcode        ),
+   .source_1      (source_1      ),
+   .source_2      (source_2      ),
+   .r1_destination(r1_destination),
+   .r2_destination(r2_destination),
+   .write_en      (write_en      ),
+   .r2_write_en   (r2_write_en   ),
+   .forward1_r1   (forward1_r1   ),
+   .forward2_r1   (forward2_r1   ),
+   .forward1_r2   (forward1_r2   ),
+   .forward2_r2   (forward2_r2   )
+);
+
+
+//******************************************************************************
+// DATA FORWARDING
+//******************************************************************************
+assign fw_operand_1 = (forward1_r1) ? result     : 
+                      (forward1_r2) ? write_back : operand_1;
+
+assign fw_operand_2 = (forward2_r1) ? result     :
+                      (forward2_r2) ? write_back : operand_2;
 
 
 //******************************************************************************
