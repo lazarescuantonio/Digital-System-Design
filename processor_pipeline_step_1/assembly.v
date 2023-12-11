@@ -62,5 +62,11 @@ parameter R7                   =  3'b111;
 parameter SUCCESS_COUNT        =  6'd0;
 parameter TEST_COUNT           = {6'b0, 6'b11_1111}; //    -1   =>   00_0001   =>   11_1110 + 1   =>   11_1111
 
+parameter JMP_LOAD             =  6'b11_1111;        //    -1   =>   00_0001   =>   11_1110 + 1   =>   11_1111
+parameter JMP_STORE_AGAIN      = {6'b0, 6'b11_1000}; //    -8   =>   00_1000   =>   11_0111 + 1   =>   11_1000
+parameter FINISH_LOAD          =  6'b11_1111;        //    -1   =>   00_0001   =>   11_1110 + 1   =>   11_1111
+parameter JMP_LOAD_AGAIN       = {6'b0, 6'b11_0010}; //   -14   =>   00_1110   =>   11_0001 + 1   =>   11_0010
+
+
 parameter LEFT_8               =  6'd8;
 parameter LEFT_32              =  6'd32;

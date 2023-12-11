@@ -15,6 +15,7 @@ module seq_core_fetch
    input                   r2_pc_loadr ,
    input      [A_SIZE-1:0] r2_pc_target,
    input                   r2_pc_flush ,
+   input                   bubble      ,
    output reg       [15:0] ir
 );
 
@@ -27,6 +28,7 @@ always@(posedge clk or negedge rst_n)
    else if(r2_pc_halt ) pc <= pc;
    else if(r2_pc_load ) pc <= r2_pc_target;
    else if(r2_pc_loadr) pc <= $signed(pc) + $signed(r2_pc_target);
+   else if(bubble     ) pc <= pc;
    else                 pc <= pc + 1'b1;
 
 
@@ -37,6 +39,7 @@ always@(posedge clk or negedge rst_n)
    if     (!rst_n     ) ir <= 0;
    else if(r2_pc_halt ) ir <= ir;
    else if(r2_pc_flush) ir <= 0;
+   else if(bubble     ) ir <= ir;
    else                 ir <= instruction;
 
 

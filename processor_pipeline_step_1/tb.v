@@ -1246,6 +1246,188 @@ begin
    //==========================================================================================================
    
    //----------------------------------------------------------------------------------------------------------
+   // LOAD & STORE
+   //----------------------------------------------------------------------------------------------------------
+   
+   // start address =  50 = 0x32 = R0
+   // stop  address = 100 = 0x64 = R1
+   
+   // data = R3
+   
+   // R0 = 0x0000_0032 = start address
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'h00           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R0   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'h00           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R0   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'h00           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R0   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'h32           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // R1 = 0x0000_0064 = stop address
+   dut.rom.memory[PC] = {   LOADC   ,   R1   , 8'h00           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R1   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R1   , 8'h00           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R1   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R1   , 8'h00           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R1   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R1   , 8'h64           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // R3 = 0 = data
+   dut.rom.memory[PC] = {   SHIFTL  ,   R3   , LEFT_32         };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // (JMP_STORE_AGAIN):
+   dut.rom.memory[PC] = {   STORE   ,   R0   , 5'b0   ,   R3   };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   dut.rom.memory[PC] = {   ADD     ,   R0   ,   R0   ,   R2   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // address++
+   dut.rom.memory[PC] = {   ADD     ,   R3   ,   R3   ,   R2   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // data++
+   
+   dut.rom.memory[PC] = {   SUB     ,   R4   ,   R0   ,   R1   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // check if (actual address == stop address)
+   dut.rom.memory[PC] = {   JMPR_Z  ,   R4   , JMP_LOAD        };   PC = PC + 1'b1;   $display("PC = %0d", PC); //       if TRUE : JMP to LOAD
+   dut.rom.memory[PC] = {   JMPR    ,          JMP_STORE_AGAIN };   PC = PC + 1'b1;   $display("PC = %0d", PC); //       if FALSE: JMP to STORE again
+   
+   // (JMP_LOAD):
+   
+   // start address =  50 = 0x63 = R0
+   // stop  address = 100 = 0x32 = R1
+   
+   // data = R3
+   
+   // R0 = 0x0000_0063 = start address
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'h00           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R0   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'h00           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R0   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'h00           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R0   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'h63           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // R1 = 0x0000_0032 = stop address
+   dut.rom.memory[PC] = {   LOADC   ,   R1   , 8'h00           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R1   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R1   , 8'h00           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R1   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R1   , 8'h00           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R1   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R1   , 8'h32           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // R4 = 49 = expected
+   dut.rom.memory[PC] = {   SHIFTL  ,   R4   , LEFT_32         };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R4   , 8'd49           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // (JMP_LOAD_AGAIN):
+   // R3 = data
+   dut.rom.memory[PC] = {   LOAD    ,   R3   , 5'b0   ,   R0   };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // check
+   dut.rom.memory[PC] = {   SUB     ,   R3   ,   R3   ,   R4   };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   JMPR_Z  ,   R3   , SUCCESS_COUNT   };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   ADD     ,   R5   ,   R5   ,   R2   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // error_count++
+   dut.rom.memory[PC] = {   JMPR    ,          TEST_COUNT      };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   ADD     ,   R6   ,   R6   ,   R2   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // success_count++
+   dut.rom.memory[PC] = {   ADD     ,   R7   ,   R7   ,   R2   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // test_count++
+   
+   dut.rom.memory[PC] = {   SUB     ,   R0   ,   R0   ,   R2   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // address--
+   dut.rom.memory[PC] = {   SUB     ,   R4   ,   R4   ,   R2   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // expected--
+   
+   dut.rom.memory[PC] = {   SUB     ,   R3   ,   R0   ,   R1   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // check if (address == stop address)
+   dut.rom.memory[PC] = {   JMPR_Z  ,   R3   , FINISH_LOAD     };   PC = PC + 1'b1;   $display("PC = %0d", PC); //       if TRUE : JMP to FINISH
+   dut.rom.memory[PC] = {   JMPR    ,          JMP_LOAD_AGAIN  };   PC = PC + 1'b1;   $display("PC = %0d", PC); //       if FALSE: JMP to LOAD again
+   
+   // (FINISH_LOAD):
+   
+   //==========================================================================================================
+   
+   // R0 = 0xFF55_55FF = data_out
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'hFF           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R0   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'h55           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R0   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'h55           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R0   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'hFF           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // R1 = 0x0000_0010 = address
+   dut.rom.memory[PC] = {   SHIFTL  ,   R1   , LEFT_32         };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R1   , 8'h0A           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // R3 = data
+   dut.rom.memory[PC] = {   SHIFTL  ,   R3   , LEFT_32         };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // R4 = 0xFF55_55FF = expected
+   dut.rom.memory[PC] = {   LOADC   ,   R4   , 8'hFF           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R4   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R4   , 8'h55           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R4   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R4   , 8'h55           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R4   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R4   , 8'hFF           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // STORE: M[R1] <-- R0
+   dut.rom.memory[PC] = {   STORE   ,   R1   , 5'b0   ,   R0   };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   dut.rom.memory[PC] = {   SHIFTL  ,   R0   , LEFT_32         };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // LOAD: R0 <-- M[R1]
+   dut.rom.memory[PC] = {   LOAD    ,   R0   , 5'b0   ,   R1   };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // R3 = data
+   dut.rom.memory[PC] = {   ADD     ,   R3   ,   R3   ,   R0   };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // check
+   dut.rom.memory[PC] = {   SUB     ,   R3   ,   R3   ,   R4   };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   JMPR_Z  ,   R3   , SUCCESS_COUNT   };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   ADD     ,   R5   ,   R5   ,   R2   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // error_count++
+   dut.rom.memory[PC] = {   JMPR    ,          TEST_COUNT      };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   ADD     ,   R6   ,   R6   ,   R2   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // success_count++
+   dut.rom.memory[PC] = {   ADD     ,   R7   ,   R7   ,   R2   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // test_count++
+   
+   //==========================================================================================================
+   
+   // R0 = 0xFF55_55FF = data_out
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'hFF           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R0   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'h55           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R0   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'h55           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R0   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R0   , 8'hFF           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // R1 = 0x0000_0010 = address
+   dut.rom.memory[PC] = {   SHIFTL  ,   R1   , LEFT_32         };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R1   , 8'h0A           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // R3 = data
+   dut.rom.memory[PC] = {   SHIFTL  ,   R3   , LEFT_32         };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // R4 = 0xFF55_55FF = expected
+   dut.rom.memory[PC] = {   LOADC   ,   R4   , 8'hFF           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R4   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R4   , 8'h55           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R4   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R4   , 8'h55           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   SHIFTL  ,   R4   , LEFT_8          };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   LOADC   ,   R4   , 8'hFF           };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // STORE: M[R1] <-- R0
+   dut.rom.memory[PC] = {   STORE   ,   R1   , 5'b0   ,   R0   };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // LOAD: R1 <-- M[R1]
+   dut.rom.memory[PC] = {   LOAD    ,   R1   , 5'b0   ,   R1   };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // R3 = data
+   dut.rom.memory[PC] = {   ADD     ,   R3   ,   R3   ,   R1   };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   
+   // check
+   dut.rom.memory[PC] = {   SUB     ,   R3   ,   R3   ,   R4   };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   JMPR_Z  ,   R3   , SUCCESS_COUNT   };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   ADD     ,   R5   ,   R5   ,   R2   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // error_count++
+   dut.rom.memory[PC] = {   JMPR    ,          TEST_COUNT      };   PC = PC + 1'b1;   $display("PC = %0d", PC);
+   dut.rom.memory[PC] = {   ADD     ,   R6   ,   R6   ,   R2   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // success_count++
+   dut.rom.memory[PC] = {   ADD     ,   R7   ,   R7   ,   R2   };   PC = PC + 1'b1;   $display("PC = %0d", PC); // test_count++
+   
+   //==========================================================================================================
+   
+   //----------------------------------------------------------------------------------------------------------
    // HALT
    //----------------------------------------------------------------------------------------------------------
    dut.rom.memory[PC] = {   HALT                               };   PC = PC + 1'b1;   $display("PC = %0d", PC);

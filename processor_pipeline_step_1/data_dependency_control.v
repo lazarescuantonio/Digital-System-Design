@@ -7,13 +7,21 @@ module data_dependency_control
    input      [2:0] source_2      ,
    input      [2:0] r1_destination,
    input      [2:0] r2_destination,
+   input            read          ,
    input            write_en      ,
    input            r2_write_en   ,
+   output           bubble        ,
    output reg       forward1_r1   ,
    output reg       forward2_r1   ,
    output reg       forward1_r2   ,
    output reg       forward2_r2
 );
+
+
+//******************************************************************************
+// bubble
+//******************************************************************************
+assign bubble = ((r1_destination == source_1) | (r1_destination == source_2)) & write_en & read;
 
 
 //******************************************************************************

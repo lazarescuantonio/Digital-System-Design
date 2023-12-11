@@ -56,6 +56,7 @@ wire              forward1_r2   ;
 wire              forward2_r2   ;
 wire [D_SIZE-1:0] fw_operand_1  ;
 wire [D_SIZE-1:0] fw_operand_2  ;
+wire              bubble        ;
 
 
 //******************************************************************************
@@ -75,6 +76,7 @@ seq_core_fetch
    .r2_pc_loadr   (r2_pc_loadr   ),
    .r2_pc_target  (r2_pc_target  ),
    .r2_pc_flush   (r2_pc_flush   ),
+   .bubble        (bubble        ),
    .ir            (ir            )
 );
 
@@ -131,8 +133,10 @@ data_dependency_control data_dependency_control
    .source_2      (source_2      ),
    .r1_destination(r1_destination),
    .r2_destination(r2_destination),
+   .read          (read          ), // FIXME (output)
    .write_en      (write_en      ),
    .r2_write_en   (r2_write_en   ),
+   .bubble        (bubble        ),
    .forward1_r1   (forward1_r1   ),
    .forward2_r1   (forward2_r1   ),
    .forward1_r2   (forward1_r2   ),
@@ -162,6 +166,7 @@ r1
    .clk           (clk           ),
    .r2_pc_halt    (r2_pc_halt    ),
    .r2_pc_flush   (r2_pc_flush   ),
+   .bubble        (bubble        ),
    .opcode        (opcode        ),
    .destination   (destination   ),
    .operand_a     (operand_a     ),

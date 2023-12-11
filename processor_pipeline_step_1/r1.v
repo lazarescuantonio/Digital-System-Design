@@ -9,6 +9,7 @@ module r1
 // special
    input                   r2_pc_halt    ,
    input                   r2_pc_flush   ,
+   input                   bubble        ,
    input             [6:0] opcode        ,
    input             [2:0] destination   ,
    input      [D_SIZE-1:0] operand_a     ,
@@ -36,7 +37,7 @@ begin
       r1_operand_a   <= r1_operand_a;
       r1_operand_b   <= r1_operand_b;
    end
-   else if(r2_pc_flush)
+   else if(r2_pc_flush | bubble)
    begin
       r1_opcode      <= 0; // NOP
       r1_destination <= 0;
